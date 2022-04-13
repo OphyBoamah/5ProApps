@@ -26,6 +26,10 @@ window.onload = startAfresh;
 
 newGame.addEventListener('click', startAfresh)
 
+const scores = [0, 0]
+let currentScore = 0;
+let activePlayer = 0;
+
 let rndRoll = 0;
 
 const rollDice = () => {
@@ -37,25 +41,27 @@ const rollDice = () => {
   // console.log(rndRoll)
 }
 
-let currentScore = 0;
+
   const addCurrentScore = () => {
     if (rndRoll !== 1) {
       currentScore += rndRoll
-      playerOneCurrent.textContent = currentScore;
+      document.getElementById(`current--${activePlayer}`).textContent = currentScore
+      // playerOneCurrent.textContent = currentScore;
     } else {
+      document.getElementById(`current--${activePlayer}`).textContent = 0
       currentScore = 0;
-      playerOneCurrent.textContent = currentScore;
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      playerOne.classList.toggle('player--active')
+      playerTwo.classList.toggle('player--active')
     }
     console.log(currentScore)
   } 
 
-   const activePlayerToggle = () => {
-     for (let player of players) {
-        if (currentScore === 0) {
-       player.classList.toggle('player--active')
-     }
-  }
-}
+//    const activePlayerToggle = () => {
+//      activePlayer = activePlayer === 0 ? 1 : 0;
+//      currentScore = 0;
+//       //  player.classList.toggle('player--active')
+// }
 
     const updateScores = () => {
     if (currentScore !== 0) {
