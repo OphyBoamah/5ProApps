@@ -13,22 +13,44 @@ const players = document.querySelectorAll('.player')
 const playerOne = document.querySelector('.player--0')
 const playerTwo = document.querySelector('.player--1')
 
-// Initial Value or Game Empty State
 
-const startAfresh = () => {
+// Initial Value or Game Empty State
   playerOneScore.textContent=0;
   playerTwoScore.textContent=0;
   diceImage.classList.add('hidden')
-}
 
 // Initialize a New Game
-window.onload = startAfresh;
+const startAfresh = () => {
+  const scores = [0, 0]
+  let currentScore = 0;
+  let activePlayer = 0;
+  let playing = true;
+  playerOneScore.textContent=0;
+  playerTwoScore.textContent=0;
+  playerOneCurrent.textContent=0;
+  playerTwoCurrent.textContent=0;
+  playerOne.classList.remove('player--winner');
+  playerTwo.classList.remove('player--winner');
+  playerOne.classList.add('player--active');
+  playerTwo.classList.remove('player--active');
+  diceImage.classList.add('hidden')
+}
+startAfresh();
 
 newGame.addEventListener('click', startAfresh)
 
 const scores = [0, 0]
 let currentScore = 0;
 let activePlayer = 0;
+let playing = true;
+
+const switchPlayer = () => {
+  document.getElementById(`current--${activePlayer}`).textContent = 0
+      currentScore = 0;
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      playerOne.classList.toggle('player--active')
+      playerTwo.classList.toggle('player--active')
+}
 
 let rndRoll = 0;
 
@@ -48,11 +70,7 @@ const rollDice = () => {
       document.getElementById(`current--${activePlayer}`).textContent = currentScore
       // playerOneCurrent.textContent = currentScore;
     } else {
-      document.getElementById(`current--${activePlayer}`).textContent = 0
-      currentScore = 0;
-      activePlayer = activePlayer === 0 ? 1 : 0;
-      playerOne.classList.toggle('player--active')
-      playerTwo.classList.toggle('player--active')
+      switchPlayer()
     }
     console.log(currentScore)
   } 
@@ -78,12 +96,32 @@ const rollDice = () => {
 // Player 1's Turn
 // a. Roll dice
 diceRoll.addEventListener('click', function () {
+  if (playing) {
   // b. Generate Random number between 1 and 6
   rollDice();
     // d. If it's 1 display 0 and pass to player 2 else add to current score
   addCurrentScore()
   activePlayerToggle()
+} 
 })
 
 // e. Hold adds current score to total score and pass to player 2
-holdButton.addEventListener('click', updateScores)
+holdButton.addEventListener('click', function () {
+  if (playing) {
+  scores[activePlayer] += currentScore;
+  document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer]
+
+  // Check if player's score is >= 100
+  if (scores[activePlayer] >= 20) {
+    playing = false;
+    diceImage.classList.add('hidden')
+    document.querySelector(`.player--${activePlayer}`).classList.add('player--winner');
+    document.querySelector(`.player--${activePlayer}`).classList.remove('player--active');
+  }
+  switchPlayer()
+  } else {
+    holdButton.ariaDisabled = true;
+  }
+})
+
+// New Game

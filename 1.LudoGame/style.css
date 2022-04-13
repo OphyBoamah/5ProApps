@@ -101,6 +101,7 @@ main {
 
 /* ABSOLUTE POSITIONED ELEMENTS */
 .btn {
+  cursor: pointer;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -110,7 +111,7 @@ main {
   font-family: inherit;
   font-size: 1.8rem;
   text-transform: uppercase;
-  cursor: pointer;
+  
   font-weight: 400;
   transition: all 0.2s;
 
